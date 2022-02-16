@@ -1,0 +1,56 @@
+---
+title: "P09.2_Cacace_Analyses_R"
+author: "Nikita Cacace"
+date: "23/09/2021"
+output:
+  html_document: default
+  pdf_document: 
+    toc: yes
+    fig_width: 3
+    fig_height: 2
+    fig_caption: yes
+    number_sections: yes
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+##Packages and options:
+```{r}
+library(readr)
+library(tidyr)
+library(dplyr)
+library(Factoshiny)
+options(digits = 3)
+```
+
+##Data import:
+```{r}
+Complet_df <- read_csv("C:/Users/leroc/Dropbox/2020 - 2021 OpenClassrooms, MOOC et conférences/09 - Produisez une étude de marché avec R ou Python/Complet_data.csv")
+```
+Le nombre de lignes et de colonnes correspond au nombre attendus. c_zone ne devrait considéré comme chr.
+```{r}
+mode(Complet_df)
+```
+On veux un dataframe, pas une liste.
+```{r}
+as.data.frame(Complet_df,
+              row.names = NULL, 
+              optional = FALSE,
+              cut.names = FALSE,
+              col.names = names(x), 
+              fix.empty.names = TRUE,
+              stringsAsFactors = default.stringsAsFactors())
+str(Complet_df)
+summary(Complet_df)
+sum(is.na(Complet_df))
+```
+```{r}
+Complet_df <- Complet_df[-1]
+summary(Complet_df)
+```
+
+```{r}
+res <- Factoshiny(Complet_df)
+
+```
+

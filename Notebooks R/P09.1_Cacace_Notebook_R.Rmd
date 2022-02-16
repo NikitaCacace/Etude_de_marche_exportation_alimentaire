@@ -1,0 +1,166 @@
+---
+title: "P09_Cacace_Notebook_R"
+author: "Nikita Cacace"
+date: "23/09/2021"
+output:
+  html_document: default
+  pdf_document: 
+    toc: yes
+    fig_width: 3
+    fig_height: 2
+    fig_caption: yes
+    number_sections: yes
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+##Packages and options:
+```{r}
+library(readr)
+library(tidyr)
+library(dplyr)
+options(digits = 3)
+```
+
+##Data import:
+```{r}
+Dispo_Alim_df <- read_csv("C:/Users/leroc/Dropbox/2020 - 2021 OpenClassrooms, MOOC et conférences/09 - Produisez une étude de marché avec R ou Python/DisponibiliteAlimentaire_2017.csv")
+Pop_df <- read_csv("C:/Users/leroc/Dropbox/2020 - 2021 OpenClassrooms, MOOC et conférences/09 - Produisez une étude de marché avec R ou Python/Population_2000_2018.csv")
+Pib_df <- read_csv("C:/Users/leroc/Dropbox/2020 - 2021 OpenClassrooms, MOOC et conférences/09 - Produisez une étude de marché avec R ou Python/Population_2000_2018.csv")
+```
+## Colums renaming:
+```{r}
+names(Dispo_Alim_df)[1] <- "c_domain"
+names(Dispo_Alim_df)[2] <-"domain"
+names(Dispo_Alim_df)[3] <-"c_zone"
+names(Dispo_Alim_df)[4] <-"zone"
+names(Dispo_Alim_df)[5] <-"c_element"
+names(Dispo_Alim_df)[6] <-"element"
+names(Dispo_Alim_df)[7] <-"c_prod"
+names(Dispo_Alim_df)[8] <-"prod"
+names(Dispo_Alim_df)[9] <-"c_year"
+names(Dispo_Alim_df)[10] <-"year"
+names(Dispo_Alim_df)[11] <-"unit"
+names(Dispo_Alim_df)[12] <-"value"
+names(Dispo_Alim_df)[13] <-"symb"
+names(Dispo_Alim_df)[14] <-"symb_description"
+
+names(Pop_df)[1] <- "c_domain"
+names(Pop_df)[2] <-"domain"
+names(Pop_df)[3] <-"c_zone"
+names(Pop_df)[4] <-"zone"
+names(Pop_df)[5] <-"c_element"
+names(Pop_df)[6] <-"element"
+names(Pop_df)[7] <-"c_prod"
+names(Pop_df)[8] <-"prod"
+names(Pop_df)[9] <-"c_year"
+names(Pop_df)[10] <-"year"
+names(Pop_df)[11] <-"unit"
+names(Pop_df)[12] <-"value"
+names(Pop_df)[13] <-"symb"
+names(Pop_df)[14] <-"symb_description"
+names(Pop_df)[15] <-"note"
+
+names(Pib_df)[1] <- "c_domain"
+names(Pib_df)[2] <-"domain"
+names(Pib_df)[3] <-"c_zone"
+names(Pib_df)[4] <-"zone"
+names(Pib_df)[5] <-"c_element"
+names(Pib_df)[6] <-"element"
+names(Pib_df)[7] <-"c_prod"
+names(Pib_df)[8] <-"prod"
+names(Pib_df)[9] <-"c_year"
+names(Pib_df)[10] <-"year"
+names(Pib_df)[11] <-"unit"
+names(Pib_df)[12] <-"value"
+names(Pib_df)[13] <-"symb"
+names(Pib_df)[14] <-"symb_description"
+names(Pib_df)[15] <-"note"
+```
+
+##Data cleaning:
+#Dispo_Alim_df:
+```{r}
+mode(Dispo_Alim_df)
+```
+Dispo_Alim_df is a 'list' we want a data frame
+```{r}
+as.data.frame(Dispo_Alim_df,
+              row.names = NULL, 
+              optional = FALSE,
+              cut.names = FALSE,
+              col.names = names(x), 
+              fix.empty.names = TRUE,
+              stringsAsFactors = default.stringsAsFactors())
+str(Dispo_Alim_df)
+summary(Dispo_Alim_df)
+sum(is.na(Dispo_Alim_df))
+```
+The number of lines and columns is as expected. There are no missing values nor NA."code" columns should be in chr and not in num.
+```{r}
+Dispo_Alim_df$c_domain <- as.character(Dispo_Alim_df$c_domain)
+Dispo_Alim_df$c_zone<- as.character(Dispo_Alim_df$c_zone)
+Dispo_Alim_df$c_element<- as.character(Dispo_Alim_df$c_element)
+Dispo_Alim_df$c_prod<- as.character(Dispo_Alim_df$c_prod)
+Dispo_Alim_df$c_year <- as.character(Dispo_Alim_df$c_year)
+
+summary(Dispo_Alim_df)
+```
+
+#Pop_df:
+```{r}
+mode(Pop_df)
+```
+Pop_df is a 'list' we want a data frame
+```{r}
+as.data.frame(Pop_df,
+              row.names = NULL, 
+              optional = FALSE,
+              cut.names = FALSE,
+              col.names = names(x), 
+              fix.empty.names = TRUE,
+              stringsAsFactors = default.stringsAsFactors())
+str(Pop_df)
+summary(Pop_df)
+sum(is.na(Pop_df))
+```
+The number of lines and columns is as expected.No missing data except for "note", it may be deleted latter. ''code'' are not in chr.
+
+```{r}
+Pop_df$c_domain <- as.character(Pop_df$c_domain)
+Pop_df$c_zone<- as.character(Pop_df$c_zone)
+Pop_df$c_element<- as.character(Pop_df$c_element)
+Pop_df$c_prod<- as.character(Pop_df$c_prod)
+Pop_df$c_year <- as.character(Pop_df$c_year)
+
+summary(Pop_df)
+```
+
+#Pib_df:
+```{r}
+mode(Pib_df)
+```
+Pib_df is a 'list' we want a data frame
+```{r}
+as.data.frame(Pib_df,
+              row.names = NULL, 
+              optional = FALSE,
+              cut.names = FALSE,
+              col.names = names(x), 
+              fix.empty.names = TRUE,
+              stringsAsFactors = default.stringsAsFactors())
+str(Pib_df)
+summary(Pib_df)
+sum(is.na(Pib_df))
+```
+The number of lines and columns is as expected.No missing data except for "note", it may be deleted latter. ''code'' are not in chr.
+
+```{r}
+Pib_df$c_domain <- as.character(Pib_df$c_domain)
+Pib_df$c_zone<- as.character(Pib_df$c_zone)
+Pib_df$c_element<- as.character(Pib_df$c_element)
+Pib_df$c_prod<- as.character(Pib_df$c_prod)
+Pib_df$c_year <- as.character(Pib_df$c_year)
+
+summary(Pib_df)
+```
